@@ -11,6 +11,9 @@ public class PlayerController : MonoBehaviour
     float maxXPosition = 4.35f;
     bool isPlayerMoveing;
 
+    float maxPlayerScale = 2.5f;
+    float minPlayerScale = .8f;
+    float diamondValue = .2f;
 
     private void Start()
     {
@@ -49,6 +52,19 @@ public class PlayerController : MonoBehaviour
         transform.Translate(xValue * Time.deltaTime, 0, playerSpeed * Time.deltaTime);
         float newXValue = Mathf.Clamp(transform.position.x, -maxXPosition, maxXPosition);
         transform.position = new Vector3(newXValue, transform.position.y, transform.position.z);
+    }
+
+    public void TouchToDiamond()
+    {
+        GetBigger();
+    }
+    private void GetBigger()
+    {
+        transform.localScale = new Vector3(transform.localScale.x+diamondValue, transform.localScale.y + diamondValue, transform.localScale.z + diamondValue);
+        if (transform.localScale.x>maxPlayerScale)
+        {
+            transform.localScale = new Vector3(maxPlayerScale, maxPlayerScale, maxPlayerScale);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
