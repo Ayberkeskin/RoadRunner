@@ -8,18 +8,12 @@ public class DiamondController : MonoBehaviour
     PlayerController playerController;
     bool isItCollected;
 
-    // Start is called before the first frame update
     void Start()
     {
         playerGO = GameObject.FindGameObjectWithTag("Player");
         playerController = playerGO.GetComponent<PlayerController>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     private void OnTriggerEnter(Collider other)
     {

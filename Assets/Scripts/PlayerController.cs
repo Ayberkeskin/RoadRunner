@@ -14,6 +14,11 @@ public class PlayerController : MonoBehaviour
     float maxPlayerScale = 2.5f;
     float minPlayerScale = .8f;
     float diamondValue = .2f;
+    float trapDamageValue = .3f;
+
+   [SerializeField] GameObject particleDia;
+   [SerializeField] GameObject particleObstical;
+
 
     private void Start()
     {
@@ -31,7 +36,6 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-
         float xValue = 0;
         if (Input.GetMouseButtonDown(0))
         {
@@ -57,13 +61,43 @@ public class PlayerController : MonoBehaviour
     public void TouchToDiamond()
     {
         GetBigger();
+        ParticleDia();
     }
+
+    public void TouchToObsticle()
+    {
+       GetSmaller();
+       ParticleObstical();
+    }
+
+    private void ParticleDia()
+    {
+        Vector3 effectPosition = new Vector3(transform.position.x,transform.position.y,transform.position.z);
+        GameObject partical=  Instantiate(particleDia, effectPosition,Quaternion.identity);
+        Destroy(partical,2f);
+    }
+    private void ParticleObstical()
+    {
+        Vector3 obsticleEffectPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+        GameObject obsticalpartical = Instantiate(particleObstical, obsticleEffectPosition, Quaternion.identity);
+        Destroy(obsticalpartical, 2f);
+    }
+
     private void GetBigger()
     {
         transform.localScale = new Vector3(transform.localScale.x+diamondValue, transform.localScale.y + diamondValue, transform.localScale.z + diamondValue);
         if (transform.localScale.x>maxPlayerScale)
         {
             transform.localScale = new Vector3(maxPlayerScale, maxPlayerScale, maxPlayerScale);
+        }
+    }
+
+    private void GetSmaller()
+    {
+        transform.localScale = new Vector3(transform.localScale.x - trapDamageValue, transform.localScale.y - trapDamageValue, transform.localScale.z - trapDamageValue);
+        if (transform.localScale.x<minPlayerScale)
+        {
+            transform.localScale = new Vector3(minPlayerScale, minPlayerScale, minPlayerScale);
         }
     }
 
