@@ -19,14 +19,36 @@ public class PlayerController : MonoBehaviour
    [SerializeField] GameObject particleDia;
    [SerializeField] GameObject particleObstical;
 
+    private Animator PlayerAC;
+
 
     private void Start()
     {
-        isPlayerMoveing = true;
+        PlayerAC = GetComponent<Animator>();
     }
     void Update()
     {
         PlayerMove();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "FinishLine")
+        {
+            isPlayerMoveing = false;
+            StartIdleAnimation();
+            GameManager.instance.ShowSuccesMenuPanel();
+        }
+        if (other.tag == "CannonBall")
+        {
+            if (isPlayerMoveing==true)
+            {
+                GetSmaller();
+                ParticleObstical();
+                Destroy(other.gameObject);
+            }
+        }
+
     }
 
 
@@ -98,15 +120,29 @@ public class PlayerController : MonoBehaviour
         if (transform.localScale.x<minPlayerScale)
         {
             transform.localScale = new Vector3(minPlayerScale, minPlayerScale, minPlayerScale);
+            StopPlayerMoveing(); 
+            GameManager.instance.ShowFailMenu();
         }
     }
-
-    private void OnTriggerEnter(Collider other)
+    private void StopPlayerMoveing()
     {
-        if (other.tag=="FinishLine")
-        {
-            isPlayerMoveing = false;
-        }
+        isPlayerMoveing = false;
+        StartIdleAnimation();
+    }
+    public void StartPlayerMoveing()
+    {
+        isPlayerMoveing = true;
+        StartRunAnimation();
     }
 
+
+    private void StartRunAnimation()
+    {
+        PlayerAC.SetBool("isPlayerRunning", true);
+    }
+
+    private void StartIdleAnimation()
+    {
+        PlayerAC.SetBool("isPlayerRunning", false);
+    }
 }
